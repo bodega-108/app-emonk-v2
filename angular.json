@@ -119,6 +119,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "app-emonk-v2"
+    }
+  },
+  "defaultProject": "app-emonk-v2",
+  "cli": {
+    "analytics": false
+  }
 }

@@ -1,0 +1,92 @@
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header">
+            <h4>Generador de sku</h4>
+        </div>
+        <div class="card-body">
+            <div class="container ">
+                <div class="row d-flex justify-content-center">
+                    <div class="col-md-8">
+                        <form [formGroup]="form" class="form-horizontal"  (ngSubmit)="generar($event)" >
+                            <div class="mb-3">
+                                <label for="exampleFormControlInput1" class="form-label">nombre</label>
+                                <input type="text" class="form-control" id="exampleFormControlInput1" formControlName="sku">
+                              </div>
+            
+                            <select name="categoria" class="form-select form-select-lg mb-3" id="" formControlName="categoria">
+                                <option value="" disabled>categoria</option>
+                                <option value="9">Laboratorio</option>
+                                <option value="12">Medica</option>
+                            </select>
+
+                            <div class="form-check">
+                                <input class="form-check-input" formControlName="tipo" type="radio" name="tipo" id="flexRadioDefault1" value="simple" >
+                                <label class="form-check-label" for="flexRadioDefault1">
+                                  Simple
+                                </label>
+                              </div>
+                              <div class="form-check">
+                                <input class="form-check-input" formControlName="tipo" type="radio" name="tipo" id="flexRadioDefault2" value="configurable">
+                                <label class="form-check-label" for="flexRadioDefault2">
+                                  Configurable
+                                </label>
+                              </div>
+                              <div *ngIf="tipoProducto">
+
+                                <input  class="form-control mt-3" formControlName="variantes" type="number" placeholder="cantidad de variantes" >
+                              </div>
+
+                              <button type="submit" class="btn btn-dark mt-3"> generar </button>
+                            </form>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+    <div class="container mt-4" *ngIf="tipoProducto">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    
+                    <div class="card-header">
+                        <h5>Resultado</h5>
+                    </div>
+                  <div class="card-body">
+                      <p><strong>Sku: </strong>{{skuSimple}}</p>
+                      <button class="btn btn-dark" (click)="save()">Guardar</button>
+                  </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="container" *ngIf="tabla">
+        <table class="table">
+            <thead>
+              <tr>
+              
+                <th scope="col">Sku</th>
+                <th scope="col">nombre</th>
+                <th scope="col">Handle</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor=" let item of registroNuevo">
+              
+                <td>{{item.sku}}</td>
+                <td>{{item.nombre}}</td>
+              
+              </tr>
+
+
+            </tbody>
+          </table>
+
+          <button class="btn btn-dark" (click)="save()">Guardar</button>
+    </div>
+</div>
