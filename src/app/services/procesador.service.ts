@@ -16,10 +16,11 @@ export class ProcesadorService {
 
   nuevo(idCategoria:number, lastNumber:number, tipo:string, variantes:number){
    
+    console.log("tipo: " + tipo+" catedoria: " + idCategoria + " " + "ultimo numero: " + lastNumber + " variantes: " + variantes);
 
     let categoria = idCategoria;
-
-    let variante = 1;
+   
+    // let variante = 1;
     let contadorVariante = 0;
     let cantidad = lastNumber;
     let preDigito = "00000";
@@ -27,9 +28,13 @@ export class ProcesadorService {
     let newSkuConfig =[];
     let preVariante = "00";
 
+    if(variantes === null){
+      variantes = 1;
+    }
+
     if(tipo == "simple"){
       switch(categoria){
-        case 9:
+        case 1:
           cantidad++;
         for(let i = 1; i <=variantes; i++){
           
@@ -44,10 +49,12 @@ export class ProcesadorService {
           newSku = `9-${preDigito}${cantidad}-${preVariante}${[i]}`;
           
           newSkuConfig.push(newSku);
-        }        
+
+        } 
+      
               return newSkuConfig;   
             break;
-        case 12:
+        case 2:
           cantidad++;
           for(let i = 1; i <=variantes; i++){
           
@@ -70,7 +77,7 @@ export class ProcesadorService {
 
     if(tipo == "configurable"){
       switch(categoria){
-        case 9:
+        case 1:
           cantidad++;
         for(let i = 0; i <=variantes; i++){
           
@@ -88,7 +95,7 @@ export class ProcesadorService {
         }        
               return newSkuConfig;   
             break;
-        case 12:
+        case 2:
           cantidad++;
           for(let i = 0; i <=variantes; i++){
           

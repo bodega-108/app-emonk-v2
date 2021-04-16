@@ -1,4 +1,4 @@
-<div class="container mt-5">
+<div class="container mt-5" *ngIf="!loading">
     <div class="card">
         <div class="card-header">
             <h4>Generador de sku</h4>
@@ -10,15 +10,29 @@
                         <form [formGroup]="form" class="form-horizontal"  (ngSubmit)="generar($event)" >
                             <div class="mb-3">
                                 <label for="exampleFormControlInput1" class="form-label">nombre</label>
-                                <input type="text" class="form-control" id="exampleFormControlInput1" formControlName="sku">
+                                <input type="text" class="form-control" id="exampleFormControlInput1" formControlName="nombre">
                               </div>
-            
                             <select name="categoria" class="form-select form-select-lg mb-3" id="" formControlName="categoria">
                                 <option value="" disabled>categoria</option>
-                                <option value="9">Laboratorio</option>
-                                <option value="12">Medica</option>
+                                <option value="1">Laboratorio</option>
+                                <option value="2">Medica</option>
                             </select>
-
+                            <div class="mb-3">
+                              <label for="exampleFormControlInput1" class="form-label">Precio</label>
+                              <input type="text" class="form-control" id="exampleFormControlInput1" formControlName="precio">
+                            </div>
+                            <select name="categoria" class="form-select form-select-lg mb-3" id="" formControlName="cliente">
+                              <option value="" disabled>cliente</option>
+                              <option value="1">Perez</option>
+                              <option value="2">Lbf</option>
+                              <option value="3">Marzu</option>
+                              <option value="4">Hilachas</option>
+                           </select>
+                          <select name="categoria" class="form-select form-select-lg mb-3" id="" formControlName="kam">
+                              <option value="" disabled>kam</option>
+                              <option value="1">Juan Flores</option>
+                              <option value="12">Ivan Layola</option>
+                          </select>
                             <div class="form-check">
                                 <input class="form-check-input" formControlName="tipo" type="radio" name="tipo" id="flexRadioDefault1" value="simple" >
                                 <label class="form-check-label" for="flexRadioDefault1">
@@ -31,16 +45,12 @@
                                   Configurable
                                 </label>
                               </div>
-                              <div *ngIf="tipoProducto">
-
+                              <div *ngIf="configurable">
                                 <input  class="form-control mt-3" formControlName="variantes" type="number" placeholder="cantidad de variantes" >
                               </div>
-
-                              <button type="submit" class="btn btn-dark mt-3"> generar </button>
+                              <button type="submit" class="btn btn-dark mt-3">generar</button>
                             </form>
                     </div>
-
-
                 </div>
             </div>
         </div>
@@ -63,13 +73,10 @@
             </div>
         </div>
     </div>
-
-
     <div class="container" *ngIf="tabla">
         <table class="table">
             <thead>
               <tr>
-              
                 <th scope="col">Sku</th>
                 <th scope="col">nombre</th>
                 <th scope="col">Handle</th>
@@ -77,16 +84,37 @@
             </thead>
             <tbody>
               <tr *ngFor=" let item of registroNuevo">
-              
                 <td>{{item.sku}}</td>
                 <td>{{item.nombre}}</td>
-              
               </tr>
-
-
             </tbody>
           </table>
 
           <button class="btn btn-dark" (click)="save()">Guardar</button>
     </div>
+</div>
+
+<div class="container loading d-flex align-items-center" *ngIf="loading">
+  <div class="container">
+    <div class="text-center">
+      <div class="spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+
+  </div>
+  
+</div>
+
+<div class="container mt-5" *ngIf="resultadoRegistroBol" >
+ <div class="row d-flex justify-content-center">
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-body text-center">
+          <h4>{{resultadoRegistro}} <span><i class="fas fa-check-circle"></i></span> </h4>
+        </div>
+      </div>
+    </div>
+ </div>
+  
 </div>

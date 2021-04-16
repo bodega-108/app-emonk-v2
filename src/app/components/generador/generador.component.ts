@@ -17,10 +17,15 @@ export class GeneradorComponent implements OnInit {
   
   public tipoProducto : Boolean;
   public tabla : Boolean;
+  public configurable : boolean;
   public registroNuevo : Array<any> = [];
   
 
   public skuSimple : String;
+  public resultadoRegistro:String = 'Procesando'; 
+  public resultadoRegistroBol:Boolean = false; 
+  //loading
+  public loading : boolean = false;
 
   constructor(private EmonkService: InformacionService, private ProcesadorService:ProcesadorService ) { }
 
@@ -31,21 +36,28 @@ export class GeneradorComponent implements OnInit {
   formulario(){
 
     this.form = new FormGroup({
-      sku: new FormControl('',[Validators.required]),
+      nombre: new FormControl('',[Validators.required]),
       categoria: new FormControl('',[Validators.required]),
+      precio: new FormControl('',[Validators.required]),
+      cliente: new FormControl('',[Validators.required]),
+      kam: new FormControl('',[Validators.required]),
       tipo: new FormControl('simple',[Validators.required]),
       variantes: new FormControl(1,[Validators.required]),
+   
+     
+      
     });
 
-    this.form.valueChanges.pipe(
-      debounceTime(500)
-    ).subscribe(data => {
-      console.log(data);
+    this.form.valueChanges.subscribe(data => {
+       console.log(data);
 
       if(data.tipo === "configurable"){
-        this.tipoProducto = true;
-      }else{
         this.tipoProducto = false;
+        this.configurable = true;
+      }
+
+      if(data.tipo === "simple"){
+        this.configurable = false;
       }
       let catego = parseFloat(data.categoria);
      // this.solicitudInfo(catego,data.tipo ,data.variantes);
@@ -60,29 +72,24 @@ export class GeneradorComponent implements OnInit {
   solicitudInfo(idCategoria:number, tipo, variantes){
 
     this.EmonkService.getSkus(idCategoria).subscribe(data => {
-      console.log(data);
-      
+      // console.log(data);
       let numero= [];
-      
       for(let i = 0; i < data.productos.length; i++) {
         
         //console.log(data.productos[i].sku);
         //console.log(data.productos[i].sku.substring(6,9));
          //console.log(Number(data['productos'][i].sku.substring(6,9)));
-
          numero.push(parseFloat(data.productos[i].sku.substring(6,9)));
-        
-      
-        
       }
-      console.log(numero);
+
+      // console.log(numero);
       
       let resultado = this.ProcesadorService.ultimo(numero);
-      //console.log(resultado);
+      console.log(resultado);
 
       let newSku = this.ProcesadorService.nuevo(idCategoria,resultado,tipo,variantes);
 
-      console.log(newSku);
+      // console.log(newSku);
 
       let skuNuevo;
       
@@ -90,39 +97,83 @@ export class GeneradorComponent implements OnInit {
 
        skuNuevo = {
          sku: `${newSku[i]}`,
-         nombre:`TEXTO DE PRUEBA-${i}`,
+        
        }
+       skuNuevo.nombre = this.form.value.nombre;
+       skuNuevo.estado = 'Pendiente';
+      skuNuevo.id_categoria = this.form.value.categoria;
+      //  if(this.form.value.categoria == 9) {
+      //   skuNuevo.id_categoria = 1;
+      //  }
+      //  if(this.form.value.categoria == 12) {
+      //   skuNuevo.id_categoria = 2;
+      //  }
+      
+       skuNuevo.precio= this.form.value.precio;
+       skuNuevo.id_cliente= this.form.value.cliente;
+       skuNuevo.id_kam = this.form.value.kam;
 
         this.registroNuevo.push(skuNuevo);
       }
 
-      console.log(this.registroNuevo);
-
+        console.log(this.registroNuevo);
 
       if(this.registroNuevo.length === 1){
          // console.log('es solo uno');
           this.skuSimple = this.registroNuevo[0].sku;
           this.tipoProducto = true;
       }else{
-        console.log('no lo es');
         this.tabla = true;
         this.tipoProducto=false;
       }
-
+          setTimeout(() => {
+        this.loading = false;
+      },2000);
     });
   }
 
   generar(event:Event){
-
+    this.loading = true;
     const informacion = this.form.value;
     const categoria = parseFloat(informacion.categoria);
     this.solicitudInfo(categoria,informacion.tipo ,informacion.variantes);
-
-
-    
   }
 
   save(){
-    console.log('guardar');
+    this.loading = true;
+    this.EmonkService.guardarSku(this.registroNuevo).subscribe(data=>{
+      console.log(data);
+
+        if(data.ok){
+          this.resultadoRegistro = 'Registro exitoso';
+        }else{
+          this.loading = false;
+          this.resultadoRegistro = 'Lo sentimos, ha ocurrido un error';
+        }
+
+      setTimeout(() => {
+        this.loading = false;
+        console.log(this.loading);
+        this.tipoProducto = false;
+        this.tabla = false;
+        this.resultadoRegistroBol = true;
+        
+        setTimeout(() => {
+          this.resultadoRegistroBol = false;  
+        },2000);
+
+      },3000);
+    });
+
+    this.form.reset();
+    // this.form.setValue({variantes:1});
+    //Vaciar Array
+    for(let i = this.registroNuevo.length; i > 0; i--) {
+      this.registroNuevo.pop();
+    }
+    
+
+    
+
   }
 }
