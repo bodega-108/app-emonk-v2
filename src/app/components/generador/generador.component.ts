@@ -171,9 +171,5 @@ export class GeneradorComponent implements OnInit {
     for(let i = this.registroNuevo.length; i > 0; i--) {
       this.registroNuevo.pop();
     }
-    
-
-    
-
   }
 }
