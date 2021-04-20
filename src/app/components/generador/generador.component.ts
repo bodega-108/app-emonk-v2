@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { debounceTime } from 'rxjs/operators';
+import { debounceTime, retry, catchError } from 'rxjs/operators';
 import { InformacionService } from 'src/app/services/informacion.service';
 import { ProcesadorService } from '../../services/procesador.service'; 
+
+import { Observable, throwError } from 'rxjs';
 
 
 
@@ -38,14 +40,11 @@ export class GeneradorComponent implements OnInit {
     this.form = new FormGroup({
       nombre: new FormControl('',[Validators.required]),
       categoria: new FormControl('',[Validators.required]),
-      precio: new FormControl('',[Validators.required]),
+      precio: new FormControl('',[Validators.required,Validators.pattern('[0-9]*')]),
       cliente: new FormControl('',[Validators.required]),
       kam: new FormControl('',[Validators.required]),
       tipo: new FormControl('simple',[Validators.required]),
       variantes: new FormControl(1,[Validators.required]),
-   
-     
-      
     });
 
     this.form.valueChanges.subscribe(data => {
@@ -133,37 +132,52 @@ export class GeneradorComponent implements OnInit {
   }
 
   generar(event:Event){
-    this.loading = true;
-    const informacion = this.form.value;
-    const categoria = parseFloat(informacion.categoria);
-    this.solicitudInfo(categoria,informacion.tipo ,informacion.variantes);
+
+    if(this.form.valid){
+      this.loading = true;
+      const informacion = this.form.value;
+      const categoria = parseFloat(informacion.categoria);
+      this.solicitudInfo(categoria,informacion.tipo ,informacion.variantes);
+      console.log("es valido");
+    }else{
+      console.log("no valido");
+      this.form.markAllAsTouched();
+    }
+
+    
+
   }
 
   save(){
     this.loading = true;
-    this.EmonkService.guardarSku(this.registroNuevo).subscribe(data=>{
-      console.log(data);
-
-        if(data.ok){
-          this.resultadoRegistro = 'Registro exitoso';
-        }else{
-          this.loading = false;
-          this.resultadoRegistro = 'Lo sentimos, ha ocurrido un error';
-        }
-
-      setTimeout(() => {
-        this.loading = false;
-        console.log(this.loading);
-        this.tipoProducto = false;
-        this.tabla = false;
-        this.resultadoRegistroBol = true;
-        
+    try{
+      this.EmonkService.guardarSku(this.registroNuevo).subscribe(data=>{
+        console.log(data);
+  
+          if(data.ok){
+            this.resultadoRegistro = 'Registro exitoso';
+          }else{
+            this.loading = false;
+            this.resultadoRegistro = 'Lo sentimos, ha ocurrido un error';
+          }
+  
         setTimeout(() => {
-          this.resultadoRegistroBol = false;  
-        },2000);
+          this.loading = false;
+          console.log(this.loading);
+          this.tipoProducto = false;
+          this.tabla = false;
+          this.resultadoRegistroBol = true;
+          
+          setTimeout(() => {
+            this.resultadoRegistroBol = false;  
+          },2000);
+  
+        },3000);
+      });
+    }catch(error){
+      console.log(error);
+    }
 
-      },3000);
-    });
 
     this.form.reset();
     // this.form.setValue({variantes:1});
@@ -171,5 +185,20 @@ export class GeneradorComponent implements OnInit {
     for(let i = this.registroNuevo.length; i > 0; i--) {
       this.registroNuevo.pop();
     }
+  }
+
+  cancelar(){
+    this.loading = true;
+    this.form.reset();
+    for(let i = this.registroNuevo.length; i > 0; i--) {
+      this.registroNuevo.pop();
+    }
+    setTimeout(() => {
+      this.loading = false;
+        console.log(this.loading);
+        this.tipoProducto = false;
+        this.tabla = false;
+      
+    },1000)
   }
 }

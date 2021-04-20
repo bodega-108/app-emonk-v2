@@ -11,7 +11,10 @@
                             <div class="mb-3">
                                 <label for="exampleFormControlInput1" class="form-label">nombre</label>
                                 <input type="text" class="form-control" id="exampleFormControlInput1" formControlName="nombre">
-                                <small>Debe ingresar un nombre</small>
+                                <div *ngIf="form.get('nombre').errors && form.get('nombre').touched">
+                                  <small>Debe ingresar un nombre <span><i class="fas fa-times-circle"></i></span></small>
+                                </div>
+                                
                                 
                               </div>
                             <select name="categoria" class="form-select form-select-lg mb-3" id="" formControlName="categoria">
@@ -19,22 +22,34 @@
                                 <option value="1">Laboratorio</option>
                                 <option value="2">Medica</option>
                             </select>
+                            <div *ngIf="form.get('categoria').errors && form.get('categoria').touched">
+                              <small>Debe seleccionar una categoria <span><i class="fas fa-times-circle"></i></span></small>
+                            </div>
                             <div class="mb-3">
                               <label for="exampleFormControlInput1" class="form-label">Precio</label>
                               <input type="text" class="form-control" id="exampleFormControlInput1" formControlName="precio">
+                              <div *ngIf="form.get('precio').errors && form.get('precio').touched">
+                                <small>Debe ingresar un precio <span><i class="fas fa-times-circle"></i></span></small>
+                              </div>
                             </div>
-                            <select name="categoria" class="form-select form-select-lg mb-3" id="" formControlName="cliente">
+                            <select name="cliente" class="form-select form-select-lg mb-3" id="" formControlName="cliente">
                               <option value="" disabled>cliente</option>
                               <option value="1">Perez</option>
                               <option value="2">Lbf</option>
                               <option value="3">Marzu</option>
                               <option value="4">Hilachas</option>
                            </select>
-                          <select name="categoria" class="form-select form-select-lg mb-3" id="" formControlName="kam">
+                           <div *ngIf="form.get('cliente').errors && form.get('cliente').touched">
+                            <small>Debe seleccionar un cliente <span><i class="fas fa-times-circle"></i></span></small>
+                          </div>
+                          <select name="kam" class="form-select form-select-lg mb-3" id="" formControlName="kam">
                               <option value="" disabled>kam</option>
                               <option value="1">Juan Flores</option>
                               <option value="12">Ivan Layola</option>
                           </select>
+                          <div *ngIf="form.get('kam').errors && form.get('kam').touched">
+                            <small>Debe seleccionar un kam <span><i class="fas fa-times-circle"></i></span></small>
+                          </div>
                             <div class="form-check">
                                 <input class="form-check-input" formControlName="tipo" type="radio" name="tipo" id="flexRadioDefault1" value="simple" >
                                 <label class="form-check-label" for="flexRadioDefault1">
@@ -69,7 +84,8 @@
                     </div>
                   <div class="card-body">
                       <p><strong>Sku: </strong>{{skuSimple}}</p>
-                      <button class="btn btn-dark" (click)="save()">Guardar</button>
+                      <button class="btn btn-dark mr-2" (click)="save()">Guardar</button>
+                      <button class="btn btn-danger ml-4" (click)="cancelar()">Cancelar</button>
                   </div>
                 </div>
             </div>
@@ -93,6 +109,7 @@
           </table>
 
           <button class="btn btn-dark" (click)="save()">Guardar</button>
+          <button class="btn btn-danger ml-4" (click)="cancelar()">Cancelar</button>
     </div>
 </div>
 
