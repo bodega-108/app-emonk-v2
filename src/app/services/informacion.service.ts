@@ -27,4 +27,12 @@ export class InformacionService {
     return this.http.post(this.url + `/api/productos/save`,skus,{})
    
   }
+
+  getBuscador(data):Observable<any>{
+    return this.http.get(this.url + `/api/productos/${data}`);
+  }
+
+  postUpdateSku(data):Observable<any>{
+    return this.http.post(this.url + `/api/productos/update`,data,{})
+  }
 }

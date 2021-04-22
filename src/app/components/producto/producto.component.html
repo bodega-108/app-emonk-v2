@@ -1,0 +1,54 @@
+<div class="container" *ngIf="loadFull">
+    <div class="row d-flex justify-content-center">
+        <div class="col-md-8">
+            <form [formGroup]="formEdit" (ngSubmit)="update($event)">
+                <div class="mb-3">
+                    <label for="sku" class="form-label">sku</label>
+                    <input type="text" class="form-control" id="exampleFormControlInput1" formControlName="sku">
+                 </div> 
+                 <div class="mb-3">
+                    <label for="sku" class="form-label">nombre</label>
+                    <input type="text" class="form-control" id="exampleFormControlInput1" formControlName="nombre">
+                 </div>
+                 <div class="mb-3">
+                    <label for="sku" class="form-label">precio</label>
+                    <input type="text" class="form-control" id="exampleFormControlInput1" formControlName="precio">
+                 </div>
+                 <select class="form-select" aria-label="Default select example" formControlName="categoria">
+                    <option selected>Seleccione una categoria</option>
+                    <option value="1">Laboratorio</option>
+                    <option value="2">Medica</option>
+                  </select>
+                  <select class="form-select mt-3" aria-label="Default select example" formControlName="kam">
+                    <option selected>Seleccione una categoria</option>
+                    <option value="1">Juan Flores</option>
+                    <option value="2">Ivan Layola</option>
+                  </select>
+                  <button type="submit" class="btn btn-dark mt-2">Actualizar</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-5" *ngIf="resultadoRegistroBol" >
+    <div class="row d-flex justify-content-center">
+       <div class="col-md-4">
+         <div class="card">
+           <div class="card-body text-center">
+             <h4>{{resultadoRegistro}} <span><i class="fas fa-check-circle"></i></span> </h4>
+           </div>
+         </div>
+       </div>
+    </div>
+   </div>
+<div class="container loading d-flex align-items-center" *ngIf="loading">
+    <div class="container">
+      <div class="text-center">
+        <div class="spinner-border" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+  
+    </div>
+    
+  </div>

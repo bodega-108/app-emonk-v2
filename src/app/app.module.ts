@@ -7,15 +7,21 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
 import { GeneradorComponent } from './components/generador/generador.component';
+import { BuscadorComponent } from './components/buscador/buscador.component';
+import { ProductoComponent } from './components/producto/producto.component';
 
 const routes: Routes = [
 
   { path: 'generador', component: GeneradorComponent },
+  { path: 'buscador', component: BuscadorComponent },
+  { path: 'producto/:sku', component: ProductoComponent },
 ];  
 @NgModule({
   declarations: [
     AppComponent,
-    GeneradorComponent
+    GeneradorComponent,
+    BuscadorComponent,
+    ProductoComponent
   ],
   imports: [
     BrowserModule,

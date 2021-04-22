@@ -1,11 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { debounceTime, retry, catchError } from 'rxjs/operators';
+
 import { InformacionService } from 'src/app/services/informacion.service';
 import { ProcesadorService } from '../../services/procesador.service'; 
-
-import { Observable, throwError } from 'rxjs';
-
 
 
 @Component({
@@ -62,7 +59,7 @@ export class GeneradorComponent implements OnInit {
      // this.solicitudInfo(catego,data.tipo ,data.variantes);
       
       // if(data.length > 3) {
-      
+      // 
       //   this.solicitudInfo(data.categoria);
       // }
     });

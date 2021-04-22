@@ -1,0 +1,48 @@
+<div class="container mt-5">
+    <form  [formGroup]="formbuscador" (ngSubmit)="search($event)">
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <input type="text" class="form-control" id="buscador" placeholder="ingrese un sku o un nombre de producto" formControlName="dato">
+                    <button type="submit" class="btn btn-dark mt-2">Buscar</button>
+                  </div>
+            </div>
+        </div>
+    </form>    
+</div>
+
+<div class="container mt-5" *ngIf="exito">
+    <h2 class="text-center">Resultados</h2>
+    <div class="container">
+        <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">sku</th>
+                <th scope="col">nombre</th>
+                <th scope="col">categoria</th>
+                <th scope="col">precio</th>
+                <th scope="col">acción</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of resultado">
+                <th scope="row">{{item.sku}}</th>
+                <td>{{item.nombre}}</td>
+                <td>{{item.id_categoria}}</td>
+                <td>{{item.precio}}</td>
+                <!-- <td><button  (click)="redireccion()"class="btn btn-warning"> <i class="fas fa-edit mr-5"></i></button></a><a href="#" class="btn btn-danger"><i class="far fa-trash-alt"></i></a><a href="#" class="btn btn-success"><i class="far fa-eye"></i></a> </td> -->
+                <td><button class="btn btn-warning" (click)="redireccion(item.sku)"><i class="fas fa-edit"></i></button></td>
+            </tr>
+            </tbody>
+          </table>
+    </div>
+</div>
+<div class="container mt-5" *ngIf="fail">
+    <div class="row d-flex justify-content-center">
+        <div class="card col-md-6">
+            <div class="card-body text-center">
+                <h4>No se encontraron resultados para su búsqueda</h4>
+            </div>
+        </div>
+    </div>
+</div>
